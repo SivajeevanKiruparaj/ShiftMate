@@ -5,7 +5,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'add_shift_screen.dart';
 import 'schedule_screen.dart';
 import 'profile_screen.dart';
-import 'worker_main_screen.dart';
 
 class WorkerHomeScreen extends StatelessWidget {
   const WorkerHomeScreen({super.key});
@@ -30,7 +29,6 @@ class WorkerHomeScreen extends StatelessWidget {
       }
 
       final breakMinutes = shift["breakMinutes"] ?? 0;
-
       double hours = endHour - startHour - (breakMinutes / 60);
 
       return hours < 0 ? 0 : hours;
@@ -91,7 +89,6 @@ class WorkerHomeScreen extends StatelessWidget {
               builder: (context, snapshot) {
                 double weeklyHours = 0;
                 double weeklyPay = 0;
-
                 String todayShift = "No shift today";
 
                 if (snapshot.hasData &&
@@ -102,24 +99,21 @@ class WorkerHomeScreen extends StatelessWidget {
 
                   final userShifts = data.values
                       .map((e) => Map<String, dynamic>.from(e))
-                      .where((shift) =>
-                          shift["workerId"] == currentUser.uid)
+                      .where((shift) => shift["workerId"] == currentUser.uid)
                       .toList();
 
                   final now = DateTime.now();
+                  final todayDate = "${now.day}/${now.month}/${now.year}";
 
                   for (final shift in userShifts) {
                     final hours = calculateShiftHours(shift);
-                    final rate = double.tryParse(
-                          shift["hourlyRate"].toString(),
-                        ) ??
-                        0;
+                    final rate =
+                        double.tryParse(shift["hourlyRate"].toString()) ?? 0;
 
                     weeklyHours += hours;
                     weeklyPay += hours * rate;
 
                     final date = shift["date"]?.toString() ?? "";
-                    final todayDate = "${now.day}/${now.month}/${now.year}";
 
                     if (date == todayDate) {
                       todayShift =
@@ -129,7 +123,7 @@ class WorkerHomeScreen extends StatelessWidget {
                 }
 
                 return SafeArea(
-                  child: Padding(
+                  child: SingleChildScrollView(
                     padding: const EdgeInsets.all(18),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,7 +180,7 @@ class WorkerHomeScreen extends StatelessWidget {
                           const ScheduleScreen(),
                         ),
 
-                        const Spacer(),
+                        const SizedBox(height: 18),
 
                         Container(
                           padding: const EdgeInsets.all(16),
@@ -213,6 +207,8 @@ class WorkerHomeScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+
+                        const SizedBox(height: 25),
                       ],
                     ),
                   ),

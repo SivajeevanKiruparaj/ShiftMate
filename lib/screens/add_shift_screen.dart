@@ -21,7 +21,25 @@ class _AddShiftScreenState extends State<AddShiftScreen> {
   bool isSaving = false;
 
   final breakController = TextEditingController();
-  final rateController = TextEditingController(text: "7.50");
+  final rateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loadDefaultRate();
+  }
+
+  Future<void> loadDefaultRate() async {
+    final snapshot = await FirebaseDatabase.instance
+        .ref("companySettings/defaultHourlyRate")
+        .get();
+
+    if (snapshot.exists) {
+      rateController.text = snapshot.value.toString();
+    } else {
+      rateController.text = "12.21";
+    }
+  }
 
   Future<void> pickDate() async {
     final date = await showDatePicker(
@@ -127,6 +145,13 @@ class _AddShiftScreenState extends State<AddShiftScreen> {
     if (mounted) {
       setState(() => isSaving = false);
     }
+  }
+
+  @override
+  void dispose() {
+    breakController.dispose();
+    rateController.dispose();
+    super.dispose();
   }
 
   @override

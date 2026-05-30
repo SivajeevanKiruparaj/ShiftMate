@@ -7,6 +7,7 @@ import 'invite_staff_screen.dart';
 import 'shift_list_screen.dart';
 import 'profile_screen.dart';
 import 'notification_screen.dart';
+import 'company_settings_screen.dart';
 
 
 class AdminHomeScreen extends StatelessWidget {
@@ -181,6 +182,12 @@ class AdminHomeScreen extends StatelessWidget {
                             Icons.notifications,
                             const NotificationScreen(),
                           ),
+                          _adminCard(
+                               context,
+                               "Company Settings",
+                                Icons.business,
+                                const CompanySettingsScreen(),
+                         ),
                       ],
                     ),
                   ],

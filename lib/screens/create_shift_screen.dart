@@ -27,12 +27,25 @@ class _CreateShiftScreenState extends State<CreateShiftScreen> {
   bool isSaving = false;
 
   final breakController = TextEditingController();
-  final rateController = TextEditingController(text: "7.50");
+  final rateController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     loadWorkers();
+    loadDefaultRate();
+  }
+
+  Future<void> loadDefaultRate() async {
+    final snapshot = await FirebaseDatabase.instance
+        .ref("companySettings/defaultHourlyRate")
+        .get();
+
+    if (snapshot.exists) {
+      rateController.text = snapshot.value.toString();
+    } else {
+      rateController.text = "12.21";
+    }
   }
 
   Future<void> loadWorkers() async {
@@ -124,6 +137,20 @@ class _CreateShiftScreenState extends State<CreateShiftScreen> {
       "hasBreak": hasBreak,
       "breakMinutes": breakMinutes,
       "status": "upcoming",
+      "createdBy": "admin",
+      "createdAt": DateTime.now().toString(),
+    });
+
+    final notificationId =
+        FirebaseDatabase.instance.ref("notifications").push().key!;
+
+    await FirebaseDatabase.instance
+        .ref("notifications/$notificationId")
+        .set({
+      "title": "New Shift Assigned",
+      "message":
+          "${selectedWorker!["name"]} has a shift on ${selectedDate.day}/${selectedDate.month}/${selectedDate.year} from ${startTime.format(context)} to ${endTime.format(context)}",
+      "type": "shift",
       "createdAt": DateTime.now().toString(),
     });
 
@@ -147,7 +174,9 @@ class _CreateShiftScreenState extends State<CreateShiftScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : workers.isEmpty
-              ? const Center(child: Text("No workers found. Register worker first."))
+              ? const Center(
+                  child: Text("No workers found. Register worker first."),
+                )
               : SingleChildScrollView(
                   padding: const EdgeInsets.all(18),
                   child: Column(
