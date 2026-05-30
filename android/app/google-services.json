@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "768818963112",
+    "project_id": "shiftmate-df9ec",
+    "storage_bucket": "shiftmate-df9ec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768818963112:android:c814f69c0d7c830d43589d",
+        "android_client_info": {
+          "package_name": "com.example.shiftmate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDJmC6mgYXkrNK1vJC-2Y7Cv9a4CgRu_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
